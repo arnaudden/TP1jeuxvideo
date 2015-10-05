@@ -68,6 +68,9 @@ public class ProbusJam extends Canvas implements Runnable, KeyListener {
         boolean shouldRender = false;
         double nbTick=0;
         
+        createBufferStrategy(3);
+    	BufferStrategy buffer = getBufferStrategy();
+        
         
         while(running)
         {
@@ -105,12 +108,11 @@ public class ProbusJam extends Canvas implements Runnable, KeyListener {
             if(shouldRender)
             {
             	// TP1 : Gestion de l'affichage
-            	mainWindow.createBufferStrategy(3);
-            	BufferStrategy buffer = mainWindow.getBufferStrategy();
+            	
             	Graphics graph = buffer.getDrawGraphics();
             	Render(graph);
             	graph.dispose();
-            	
+            	buffer.show();
             
             }
             
