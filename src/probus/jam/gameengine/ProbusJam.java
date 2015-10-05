@@ -59,23 +59,59 @@ public class ProbusJam extends Canvas implements Runnable, KeyListener {
 		setFocusTraversalKeysEnabled(false);
         requestFocus();
         
+        long lastTimeFPS = System.currentTimeMillis();
         long lastTime = System.nanoTime();
         double unprocessed = 0;
         
         double framerate = 60;
         double nsPerTick = 1000000000.0 / framerate;
         boolean shouldRender = false;
+        double nbTick=0;
+        
         
         while(running)
         {
         	shouldRender = false;
             
             // TP1 : Gestion des ticks
-
+        	unprocessed+=(System.nanoTime() - lastTime) / nsPerTick;
         	
+        
+        	lastTime = System.nanoTime();
+        	
+        	
+        	for(double i=1; i<unprocessed;i++ )
+        	{
+        		tick();
+        		//System.out.println("tick exécuté");
+        		unprocessed--;
+        		nbTick++;
+        		shouldRender=true;
+        		//System.out.println(nbTick);
+        		
+        	}
+        	
+        	long timeFPS =  System.currentTimeMillis() - lastTimeFPS;
+        	if (timeFPS > 1000)
+        	{
+        		System.out.println("FPS : " + nbTick);
+        		mainWindow.setTitle("TP 1 FPS : " + nbTick);
+        		lastTimeFPS = System.currentTimeMillis();
+        		nbTick = 0;
+        		
+        	}
+        	
+
             if(shouldRender)
             {
             	// TP1 : Gestion de l'affichage
+            	mainWindow.createBufferStrategy(3);
+            	BufferStrategy buffer = mainWindow.getBufferStrategy();
+            	Graphics graph = buffer.getDrawGraphics();
+            	Render(graph);
+            	graph.dispose();
+            	
+            
             }
             
             
